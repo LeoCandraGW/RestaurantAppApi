@@ -1,28 +1,16 @@
-// import 'package:restaurant_app/data/model/local_restaurant.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
+import 'package:restaurant_app/utils/result_state.dart';
+import 'package:restaurant_app/provider/restaurant_detail.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
 
-class DetailRestaurant extends StatefulWidget {
+class DetailRestaurant extends StatelessWidget {
   static const routeName = '/detailpage';
 
   final String id;
 
-  const DetailRestaurant({Key? key, required this.id})
-      : super(key: key);
-
-  @override
-  State<DetailRestaurant> createState() => _DetailRestaurantState();
-}
-
-class _DetailRestaurantState extends State<DetailRestaurant> {
-  late Future<DetailRestaurant1> _restaurant;
-
-  @override
-  void initState() {
-    super.initState();
-    _restaurant = ApiService().restaurantDetail(widget.id);
-  }
+  const DetailRestaurant({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +20,44 @@ class _DetailRestaurantState extends State<DetailRestaurant> {
           'Restaurant App',
         ),
       ),
-      body: FutureBuilder(
-        future: _restaurant,
-        builder: (context, AsyncSnapshot<DetailRestaurant1> snapshot) {
-          var state = snapshot.connectionState;
-          if (state != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator(
+      body: _buildList(),
+    );
+  }
+
+  Widget _buildList() {
+    return ChangeNotifierProvider(
+      create: (_) =>
+          RestaurantDetailProvider(apiService: ApiService(), restoId: id),
+      child: Scaffold(
+        body: Consumer<RestaurantDetailProvider>(builder: (context, state, _) {
+          if (state.state == ResultState.loading) {
+            return const Center(
+                child: CircularProgressIndicator(
               backgroundColor: Colors.blue,
             ));
-          }
-          if (snapshot.hasData) {
-            var restaurant = snapshot.data?.restaurant;
-            return DetailResto(restaurants: restaurant!);
-          } else if (snapshot.hasError) {
+          } else if (state.state == ResultState.hasData) {
+            var restaurant = state.result!.restaurant;
+            return DetailResto(restaurants: restaurant);
+          } else if (state.state == ResultState.noData) {
             return Center(
               child: Material(
-                child: Text(snapshot.error.toString()),
+                child: Text(state.message),
+              ),
+            );
+          } else if (state.state == ResultState.error) {
+            return Center(
+              child: Material(
+                child: Text(state.message),
               ),
             );
           } else {
-            return const Material(child: Text(''));
+            return const Center(
+              child: Material(
+                child: Text(""),
+              ),
+            );
           }
-        },
+        }),
       ),
     );
   }
@@ -253,18 +257,18 @@ class ReviewGridView extends StatelessWidget {
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    restaurants.customerReviews[index].date,
+              children: <Widget>[
+                Text(
+                  restaurants.customerReviews[index].date,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Text(
+                    restaurants.customerReviews[index].review,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Text(
-                      restaurants.customerReviews[index].review,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
           );
         });
   }

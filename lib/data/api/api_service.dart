@@ -6,7 +6,6 @@ import 'package:restaurant_app/data/model/search_restaurant.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://restaurant-api.dicoding.dev/';
-
   Future<LocalRestaurant> topHeadlines() async {
     final response = await http.get(Uri.parse("${_baseUrl}list"));
     if (response.statusCode == 200) {
@@ -16,7 +15,7 @@ class ApiService {
     }
   }
 
-  Future<DetailRestaurant1> restaurantDetail(String id) async {
+  Future<DetailRestaurant1> detailRestaurant(String id) async {
     final response = await http.get(Uri.parse("${_baseUrl}detail/$id"));
     if (response.statusCode == 200) {
       return DetailRestaurant1.fromJson(json.decode(response.body));
