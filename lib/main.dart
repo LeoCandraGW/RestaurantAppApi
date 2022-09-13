@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/ui/detail_resto.dart';
 import 'package:restaurant_app/ui/home_page.dart';
-import 'package:restaurant_app/data/model/local_restaurant.dart';
+// import 'package:restaurant_app/data/model/local_restaurant.dart';
 import 'package:restaurant_app/common/styles.dart';
 import 'package:restaurant_app/ui/search_restaurant.dart';
 
@@ -40,8 +40,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(),
         '/detailpage': (context) => DetailRestaurant(
-            restaurant:
-                ModalRoute.of(context)?.settings.arguments as Restaurant),
+            id:
+                ModalRoute.of(context)?.settings.arguments as String),
         '/searchpage':(context) => const SearchRestaurantPage(),
       },
     );

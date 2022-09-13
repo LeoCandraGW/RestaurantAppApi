@@ -56,7 +56,7 @@ class CardRestaurant extends StatelessWidget {
         onTap: () => Navigator.pushNamed(
           context,
           '/detailpage',
-          arguments: restaurant,
+          arguments: restaurant.id,
         ),
       ),
     );

@@ -1,15 +1,14 @@
-import 'package:restaurant_app/data/model/local_restaurant.dart';
+// import 'package:restaurant_app/data/model/local_restaurant.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
-import 'dart:convert';
+import 'package:restaurant_app/data/api/api_service.dart';
 
 class DetailRestaurant extends StatefulWidget {
   static const routeName = '/detailpage';
 
-  final Restaurant restaurant;
+  final String id;
 
-  const DetailRestaurant({Key? key, required this.restaurant})
+  const DetailRestaurant({Key? key, required this.id})
       : super(key: key);
 
   @override
@@ -17,23 +16,12 @@ class DetailRestaurant extends StatefulWidget {
 }
 
 class _DetailRestaurantState extends State<DetailRestaurant> {
-  static const String _baseUrl = 'https://restaurant-api.dicoding.dev/';
-  Future<DetailRestaurant1> detailResto() async {
-    final response =
-        await http.get(Uri.parse("${_baseUrl}detail/${widget.restaurant.id}"));
-    if (response.statusCode == 200) {
-      return DetailRestaurant1.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to load top headlines');
-    }
-  }
-
   late Future<DetailRestaurant1> _restaurant;
 
   @override
   void initState() {
     super.initState();
-    _restaurant = detailResto();
+    _restaurant = ApiService().restaurantDetail(widget.id);
   }
 
   @override
