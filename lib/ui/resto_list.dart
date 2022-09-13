@@ -36,7 +36,9 @@ class RestaurantList extends StatelessWidget {
     return Consumer<RestaurantProvider>(
       builder: (context, state, _) {
         if (state.state == ResultState.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator(
+            backgroundColor: Colors.blue,
+          ));
         } else if (state.state == ResultState.hasData) {
           return ListView.builder(
             shrinkWrap: true,

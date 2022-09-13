@@ -37,7 +37,9 @@ class _DetailRestaurantState extends State<DetailRestaurant> {
         builder: (context, AsyncSnapshot<DetailRestaurant1> snapshot) {
           var state = snapshot.connectionState;
           if (state != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(
+              backgroundColor: Colors.blue,
+            ));
           }
           if (snapshot.hasData) {
             var restaurant = snapshot.data?.restaurant;
