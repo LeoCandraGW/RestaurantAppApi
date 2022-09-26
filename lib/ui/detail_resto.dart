@@ -1,3 +1,4 @@
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
@@ -27,7 +28,7 @@ class DetailRestaurant extends StatelessWidget {
   Widget _buildList() {
     return ChangeNotifierProvider(
       create: (_) =>
-          RestaurantDetailProvider(apiService: ApiService(), restoId: id),
+          RestaurantDetailProvider(apiService: ApiService(Client()), restoId: id),
       child: Scaffold(
         body: Consumer<RestaurantDetailProvider>(builder: (context, state, _) {
           if (state.state == ResultState.loading) {
@@ -39,9 +40,9 @@ class DetailRestaurant extends StatelessWidget {
             var restaurant = state.result!.restaurant;
             return DetailResto(restaurants: restaurant);
           } else if (state.state == ResultState.noData) {
-            return Center(
+            return const Center(
               child: Material(
-                child: Text(state.message),
+                child: Text("Empty Data"),
               ),
             );
           } else if (state.state == ResultState.error) {

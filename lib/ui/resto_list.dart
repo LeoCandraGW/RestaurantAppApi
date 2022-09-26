@@ -1,36 +1,13 @@
 import 'package:restaurant_app/widgets/card_restaurant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:restaurant_app/utils/result_state.dart';
 import 'package:restaurant_app/provider/restaurant_provider.dart';
+import 'package:restaurant_app/widgets/platform_widget.dart';
 
 class RestaurantList extends StatelessWidget {
   const RestaurantList({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            const Text(
-              'Restaurant App',
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.search,
-              ),
-              onPressed: () {
-                Navigator.pushNamed( context, '/searchpage',);
-              },
-            ),
-          ],
-        ),
-      ),
-      body: _buildList(),
-    );
-  }
 
   Widget _buildList() {
     return Consumer<RestaurantProvider>(
@@ -68,6 +45,47 @@ class RestaurantList extends StatelessWidget {
           );
         }
       },
+    );
+  }
+  Widget _buildAndroid(BuildContext context) {
+    return Scaffold(
+       appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            const Text(
+              'Restaurant App',
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.search,
+              ),
+              onPressed: () {
+                Navigator.pushNamed( context, '/searchpage',);
+              },
+            ),
+          ],
+        ),
+      ),
+      body: _buildList(),
+    );
+  }
+
+  Widget _buildIos(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Restaurant App'),
+        transitionBetweenRoutes: false,
+      ),
+      child: _buildList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _buildAndroid,
+      iosBuilder: _buildIos,
     );
   }
 }

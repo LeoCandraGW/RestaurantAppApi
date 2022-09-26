@@ -1,3 +1,4 @@
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/restaurant_search.dart';
 import 'package:restaurant_app/widgets/card_restaurant.dart';
@@ -20,7 +21,7 @@ class _SearchRestaurantPageState extends State<SearchRestaurantPage> {
   Widget _buildList(BuildContext context) {
     return ChangeNotifierProvider<RestaurantSearch>(
         create: (_) => RestaurantSearch(
-              apiService: ApiService(),
+              apiService: ApiService(Client()),
             ),
         child: Column(
           children: [
